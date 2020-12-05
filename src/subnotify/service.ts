@@ -1,5 +1,5 @@
 import type { Notification } from './notification';
-import type { NotificationResponse } from 'web-push';
+import type { PushSubscription, NotificationResponse } from 'web-push';
 import type { PushSubscriberStore, PollSubscriberStore } from './store';
 
 
@@ -23,7 +23,9 @@ interface PushNotificationSender {
     ): Promise<NotificationResponse>;
 }
 
-export class NotificationSubscriptionService implements SubscriptionService, NotificationService {
+
+export class NotificationSubscriptionService implements SubscriptionService,
+                                                        NotificationService {
     private pushSubscribers: PushSubscriberStore;
     private pollSubscribers: PollSubscriberStore;
     private push: PushNotificationSender;
