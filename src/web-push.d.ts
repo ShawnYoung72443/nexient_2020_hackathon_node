@@ -1,4 +1,4 @@
-declare module "web-push" {
+declare module 'web-push' {
     export interface PushSubscription {
         endpoint: string;
         keys: {
