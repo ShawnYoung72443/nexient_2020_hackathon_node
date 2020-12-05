@@ -1,0 +1,26 @@
+{
+  "name": "hackathon2020",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShawnYoung72443/nexient_2020_hackathon_node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShawnYoung72443/nexient_2020_hackathon_node/issues"
+  },
+  "homepage": "https://github.com/ShawnYoung72443/nexient_2020_hackathon_node#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.9"
+  }
+}
