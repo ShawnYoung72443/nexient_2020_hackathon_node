@@ -1,4 +1,5 @@
 declare module 'web-push' {
+    import type {Agent} from 'https';
     export interface PushSubscription {
         endpoint: string;
         keys: {
@@ -21,7 +22,7 @@ declare module 'web-push' {
         headers?: object;
         contentEncoding?: SupportedContentEncoding;
         proxy?: string | object;
-        agent?: HTTPSAgent;
+        agent?: Agent;
     }
 
     export interface NotificationResponse {
@@ -101,7 +102,7 @@ declare module 'web-push' {
         );
         name: string;
         message: string;
-        statusCode: string;
+        statusCode: number;
         headers: object;
         body: string;
         endpoint: string;

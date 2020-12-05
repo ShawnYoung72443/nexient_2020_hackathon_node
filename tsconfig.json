@@ -9,6 +9,7 @@
     "outDir": "dist",
     "rootDir": ".",
     "sourceMap": true,
-    "strict": false
+    "strict": false,
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   }
 }

@@ -35,7 +35,8 @@ export class MemoryPushSubscriberStore implements PushSubscriberStore {
 
 interface QueuedNotification {
     notification: Notification;
-    onDequeue(): void;
+    onDelivery(): void;
+    onDeleteUnseen(): void;
 }
 
 export class MemoryPollSubscriberStore implements PollSubscriberStore {
@@ -51,18 +52,39 @@ export class MemoryPollSubscriberStore implements PollSubscriberStore {
         }
         const queuedNotification = {
             notification,
-            onDequeue() {}
+            onDelivery() {},
+            onDeleteUnseen() {}
         }
 
+        this.userQueues.get(userId).push(queuedNotification);
+
         return new Promise((resolve, reject) => {
-            queuedNotification.onDequeue = () => resolve('success');
+            queuedNotification.onDelivery = () => resolve('success');
+            queuedNotification.onDeleteUnseen = () => reject('user unsubscribed');
         });
+
     }
 
     getNotifications(userId: string): Promise<Notification[]> {
-        
+        if (!this.userQueues.has(userId)) {
+            return Promise.reject('No such user');
+        }
+        const queuedNotifications = this.userQueues.get(userId).slice();
+        for (const notification of queuedNotifications) {
+            notification.onDelivery();
+        }
+        const notifications = queuedNotifications.map(queued => queued.notification);
+        this.userQueues.set(userId, []);
+        return Promise.resolve(notifications);
     }
 
     remove(userId: string): void {
+        if (!this.userQueues.has(userId)) {
+            return;
+        }
+        for (const notification of this.userQueues.get(userId)) {
+            notification.onDeleteUnseen();
+        }
+        this.userQueues.delete(userId);
     }
 }
