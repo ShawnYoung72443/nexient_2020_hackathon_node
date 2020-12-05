@@ -7,7 +7,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "prestart": "npm run build",
-    "start": "func start",
+    "local": "cd src && func host start",
     "test": "echo \"No tests yet...\""
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/ShawnYoung72443/nexient_2020_hackathon_node#readme",
   "dependencies": {
+    "azure-functions-core-tools": "^2.7.3023",
     "express": "^4.17.1"
   },
   "devDependencies": {
