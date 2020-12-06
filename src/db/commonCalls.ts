@@ -14,17 +14,16 @@ const createUser = (doc: User):Promise<any> => {
     return create(doc, collection, database);
 }
 
-const eraseUser = (id: string):Promise<any> => {
+const eraseUser = (id: number):Promise<any> => {
     return erase(id, collection, database);
 }
 
 const getUserData = (email: string, password: string):Promise<any> => {
-    
     return getByParameters(email, password, collection, database);
 }
 
 const updateUser = (doc: User):Promise<any> => {
-    return replace(doc.userId, doc, collection, database);
+    return replace(doc.id, doc, collection, database);
 }
 
 export {

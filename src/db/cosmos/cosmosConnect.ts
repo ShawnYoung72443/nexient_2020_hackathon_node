@@ -17,7 +17,7 @@ const create = (document: User, collection: string, databaseid: string) =>
       })
   });
 
-const erase = (id:string, collection:string , databaseid:string) =>
+const erase = (id:number, collection:string , databaseid:string) =>
   new Promise((rs, rj) => {
     const pk = id;
     cosmos().database(databaseid).container(collection)
@@ -31,7 +31,7 @@ const erase = (id:string, collection:string , databaseid:string) =>
       })
   });
 
-const getById = (id:string, collection:string , databaseid:string) =>
+const getById = (id:number, collection:string , databaseid:string) =>
   new Promise((rs, rj) => {
     const pk = id;
     cosmos().database(databaseid).container(collection)
@@ -74,7 +74,7 @@ new Promise((rs, rj) => {
     })
 });
 
-const replace = (id:string, document:User, collection:string , databaseid:string) =>
+const replace = (id:number, document:User, collection:string , databaseid:string) =>
   new Promise((rs, rj) => {
     const pk = id;
     cosmos().database(databaseid).container(collection)
