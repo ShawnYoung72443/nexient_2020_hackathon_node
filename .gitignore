@@ -92,8 +92,11 @@ bin
 obj
 appsettings.json
 local.settings.json
-
 #backup files
 .*.swp
 .*.swo
 .*.un~
+
+# package-lock
+package-lock.json
+>>>>>>> 6444650ef31be280cd14284734b524016c0e23ce
