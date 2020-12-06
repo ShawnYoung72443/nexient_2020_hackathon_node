@@ -24,11 +24,14 @@
   "dependencies": {
     "@azure/cosmos": "^3.9.3",
     "azure-functions-core-tools": "^2.7.3023",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "web-push": "^3.4.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
+    "@types/node": "^14.14.10",
     "@azure/functions": "^1.0.2-beta2",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3",
+    "@types/node": "^14.14.10"
   }
 }
