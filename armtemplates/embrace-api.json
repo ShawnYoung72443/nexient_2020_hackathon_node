@@ -1,0 +1,197 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "type": "String"
+        },
+        "name": {
+            "type": "String"
+        },
+        "location": {
+            "type": "String"
+        },
+        "hostingPlanName": {
+            "type": "String"
+        },
+        "serverFarmResourceGroup": {
+            "type": "String"
+        },
+        "alwaysOn": {
+            "type": "Bool"
+        },
+        "storageAccountName": {
+            "type": "String"
+        },
+        "use32BitWorkerProcess": {
+            "type": "Bool"
+        },
+        "sku": {
+            "type": "String"
+        },
+        "skuCode": {
+            "type": "String"
+        },
+        "workerSize": {
+            "type": "String"
+        },
+        "workerSizeId": {
+            "type": "String"
+        },
+        "numberOfWorkers": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "microsoft.insights/components/embrace-API",
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "tags": {
+                "CONNECTION_COSMOS_ENDPOINT": "AccountEndpoint=https://feels-app.documents.azure.com:443/;AccountKey=Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA==;",
+                "CONNECTION_COSMOS_AUTH_KEY": "Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA=="
+            },
+            "kind": "functionapp",
+            "properties": {
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "node"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "~12"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference('microsoft.insights/components/embrace-API', '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference('microsoft.insights/components/embrace-API', '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "AzureWebJobsSecretStorageType",
+                            "value": "files"
+                        },
+                        {
+                            "name": "CONNECTION_COSMOS_ENDPOINT",
+                            "value": "AccountEndpoint=https://feels-app.documents.azure.com:443/;AccountKey=Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA==;"
+                        },
+                        {
+                            "name": "CONNECTION_COSMOS_AUTH_KEY",
+                            "value": "Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA=="
+                        },
+                        {
+                            "name": "EMBRACE_DATABASE",
+                            "value": "FeelsApp"
+                        },
+                        {
+                            "name": "USER_CONTAINER",
+                            "value": "users"
+                        }
+                    ],
+                    "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
+                    "alwaysOn": "[parameters('alwaysOn')]"
+                },
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "clientAffinityEnabled": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "tags": {
+                "CONNECTION_COSMOS_ENDPOINT": "AccountEndpoint=https://feels-app.documents.azure.com:443/;AccountKey=Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA==;",
+                "CONNECTION_COSMOS_AUTH_KEY": "Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA=="
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            },
+            "kind": "",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]"
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02-preview",
+            "name": "embrace-API",
+            "location": "eastus2",
+            "dependsOn": [
+                "newWorkspaceTemplate"
+            ],
+            "tags": {
+                "CONNECTION_COSMOS_ENDPOINT": "AccountEndpoint=https://feels-app.documents.azure.com:443/;AccountKey=Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA==;",
+                "CONNECTION_COSMOS_AUTH_KEY": "Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA=="
+            },
+            "properties": {
+                "ApplicationId": "[parameters('name')]",
+                "Request_Source": "IbizaWebAppExtensionCreate",
+                "Flow_Type": "Redfield",
+                "Application_Type": "web",
+                "WorkspaceResourceId": "/subscriptions/8bc8832e-4325-4848-beb5-8657dd5f9895/resourceGroups/DefaultResourceGroup-EUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-8bc8832e-4325-4848-beb5-8657dd5f9895-EUS2"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "CONNECTION_COSMOS_ENDPOINT": "AccountEndpoint=https://feels-app.documents.azure.com:443/;AccountKey=Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA==;",
+                "CONNECTION_COSMOS_AUTH_KEY": "Tmt3MMilW1wVhApVzdgDhNU2mKJUbMBq4VBSKAr2xjmrF8XPhkOBUyciBSKeeLzOkXn1Z8kspvO16YtioFQPMA=="
+            },
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "newWorkspaceTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "apiVersion": "2020-08-01",
+                            "name": "DefaultWorkspace-8bc8832e-4325-4848-beb5-8657dd5f9895-EUS2",
+                            "type": "Microsoft.OperationalInsights/workspaces",
+                            "location": "eastus2",
+                            "properties": {}
+                        }
+                    ]
+                }
+            },
+            "subscriptionId": "[parameters('subscriptionId')]",
+            "resourceGroup": "DefaultResourceGroup-EUS2"
+        }
+    ]
+}
